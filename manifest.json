@@ -1,0 +1,25 @@
+{
+	"manifest_version": 2.0,
+	"id": "maintdevices",
+	"type": "widget",
+	"name": "Devices in maintenance",
+	"namespace": "MaintDevices",
+	"version": "1.0.0",
+	"author": "John Danhires",
+	"description": "Every host Zabbix currently has suppressed, whoever placed the window. No internal items, no service token, no configuration file.",
+	"actions": {
+		"widget.maintdevices.view": {
+			"class": "WidgetView"
+		}
+	},
+	"widget": {
+		"size": {
+			"width": 24,
+			"height": 5
+		},
+		"refresh_rate": 60
+	},
+	"assets": {
+		"css": ["widget.css"]
+	}
+}

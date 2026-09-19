@@ -1,0 +1,124 @@
+/*
+ * Devices in maintenance widget.
+ *
+ * Zabbix ships four themes as separate stylesheets with no reliable hook to
+ * branch on, so every colour here is inherited, a translucent grey that works
+ * over any background, or an accent picked to clear contrast on both light and
+ * dark. Nothing hardcodes a background or a text colour.
+ */
+
+.md-body {
+	height: 100%;
+	overflow: auto;
+}
+
+/* ----------------------------------------------------------- count ----- */
+
+.md-count {
+	align-items: baseline;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 10px;
+	padding: 2px 0 10px;
+}
+
+.md-count-number {
+	font-size: 40px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.md-count-label {
+	font-size: 13px;
+	opacity: .7;
+}
+
+.md-quiet {
+	opacity: .35;
+}
+
+/*
+ * The flagged figure is the one that should catch an eye from across the room.
+ * Amber rather than red: a long window is a question, not an outage.
+ */
+.md-flagged {
+	background: rgba(215, 150, 20, .22);
+	border: 1px solid rgba(215, 150, 20, .55);
+	border-radius: 11px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 4px;
+	padding: 2px 10px;
+	white-space: nowrap;
+}
+
+/* ----------------------------------------------------------- table ----- */
+
+.md-table td {
+	vertical-align: top;
+}
+
+.md-host {
+	font-weight: 600;
+}
+
+.md-sub {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+	font-size: 10px;
+	opacity: .6;
+}
+
+.md-mono {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+	font-size: 11px;
+}
+
+.md-row-stale {
+	background: rgba(215, 150, 20, .1);
+}
+
+.md-stale {
+	font-weight: 700;
+}
+
+.md-empty {
+	opacity: .55;
+	padding: 18px 4px;
+	text-align: center;
+}
+
+/* ------------------------------------------------------ tags, pills ---- */
+
+.md-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3px;
+	max-width: 280px;
+}
+
+.md-tag {
+	background: rgba(56, 132, 255, .16);
+	border: 1px solid rgba(56, 132, 255, .3);
+	border-radius: 3px;
+	font-size: 10px;
+	padding: 1px 6px;
+	white-space: nowrap;
+}
+
+.md-pill {
+	border-radius: 9px;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: .4px;
+	padding: 1px 8px;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.md-pill-ok {
+	background: rgba(38, 160, 90, .28);
+}
+
+.md-pill-nodata {
+	background: rgba(215, 150, 20, .3);
+}
