@@ -6,9 +6,10 @@ use Modules\MaintDevices\Widget;
 
 use Zabbix\Widgets\CWidgetForm;
 
+use Modules\MaintDevices\Includes\CWidgetFieldDuration;
+
 use Zabbix\Widgets\Fields\{
 	CWidgetFieldCheckBox,
-	CWidgetFieldIntegerBox,
 	CWidgetFieldMultiSelectGroup,
 	CWidgetFieldMultiSelectHost,
 	CWidgetFieldRadioButtonList,
@@ -55,8 +56,8 @@ class WidgetForm extends CWidgetForm {
 			// not in maintenance, it is forgotten, and it is the mechanism
 			// behind "why didn't you alert on that outage".
 			->addField(
-				(new CWidgetFieldIntegerBox('stale_days', _('Flag after (days)'), 0, 3650))
-					->setDefault(7)
+				(new CWidgetFieldDuration('stale_after', _('Flag after')))
+					->setDefault('7d')
 			)
 			->addField(
 				new CWidgetFieldCheckBox('only_stale', _('Show only flagged'))

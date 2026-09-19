@@ -4,7 +4,7 @@
 	"type": "widget",
 	"name": "Devices in maintenance",
 	"namespace": "MaintDevices",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"author": "John Danhires",
 	"description": "Every host Zabbix currently has suppressed, whoever placed the window. No internal items, no service token, no configuration file.",
 	"actions": {

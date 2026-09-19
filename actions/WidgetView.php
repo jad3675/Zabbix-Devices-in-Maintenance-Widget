@@ -6,6 +6,7 @@ use API;
 use CControllerDashboardWidgetView;
 use CControllerResponseData;
 
+use Modules\MaintDevices\Includes\CWidgetFieldDuration;
 use Modules\MaintDevices\Widget;
 
 class WidgetView extends CControllerDashboardWidgetView {
@@ -13,8 +14,12 @@ class WidgetView extends CControllerDashboardWidgetView {
 	protected function doAction(): void {
 		$hosts = $this->fetchHosts();
 		$now = time();
-		$stale_days = (int) $this->fields_values['stale_days'];
-		$stale_after = $stale_days > 0 ? $stale_days * SEC_PER_DAY : 0;
+		// Parsed with the same code the field validates with, so what was
+		// accepted in the config dialog and what is acted on here cannot drift.
+		// The field already rejected anything unparseable; null here would
+		// mean a config written before this field existed, so fall back to off.
+		$stale_after = CWidgetFieldDuration::parse((string) $this->fields_values['stale_after'])
+			?? CWidgetFieldDuration::OFF;
 		$collection = (int) $this->fields_values['collection'];
 		$only_stale = (int) $this->fields_values['only_stale'] === 1;
 
@@ -37,7 +42,9 @@ class WidgetView extends CControllerDashboardWidgetView {
 
 			$from = (int) $host['maintenance_from'];
 			$duration = $from > 0 ? max(0, $now - $from) : 0;
-			$is_stale = ($stale_after > 0 && $from > 0 && $duration >= $stale_after);
+			$is_stale = ($stale_after > CWidgetFieldDuration::OFF && $from > 0
+				&& $duration >= $stale_after
+			);
 
 			if ($only_stale && !$is_stale) {
 				continue;
@@ -86,7 +93,11 @@ class WidgetView extends CControllerDashboardWidgetView {
 			'rows' => $rows,
 			'total' => count($rows),
 			'flagged' => $flagged,
-			'stale_days' => $stale_days,
+			'stale_after' => $stale_after,
+			// The operator's own string, not a normalised one. format() would
+			// turn "7d" into "1w": same duration, but not what they typed, and
+			// a badge that silently rewords the threshold is mildly maddening.
+			'stale_after_text' => strtolower(trim((string) $this->fields_values['stale_after'])),
 			'display' => (int) $this->fields_values['display'],
 			'show_tags' => (int) $this->fields_values['show_tags'] === 1,
 			'user' => ['debug_mode' => $this->getDebugMode()]

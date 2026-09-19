@@ -66,15 +66,15 @@ Windows module's **Devices in Maintenance** page is for.
 | Host tags | And/Or, full operator set. Pairs well with a `site:` tag scheme. |
 | Show | Count / List / Count and list. |
 | Collection | Any, or only hosts whose window is still polling, or only the ones gone dark. |
-| Flag after (days) | Highlight anything suppressed longer than this. 0 turns it off. Default 7. |
+| Flag after | Highlight anything suppressed longer than this. Free-form duration: `5m`, `90m`, `22h`, `7d`, `2w`, or combinations like `1h30m`. `0` turns it off. Default `7d`. |
 | Show only flagged | Turns the widget into a pure exception tile. |
 | Sort by | Host name, or longest-suppressed first. |
 | Show host tags | Off saves a `selectTags` on the query and a column. |
 
 ## The number that matters
 
-**Flag after (days)** is the reason to put this on a wallboard rather than
-bookmark a page.
+**Flag after** is the reason to put this on a wallboard rather than bookmark a
+page.
 
 A host suppressed for 40 days is not in maintenance. It is a hole in your
 coverage that somebody opened and forgot about, and it is the mechanism behind
@@ -84,8 +84,22 @@ the worst conversation an MSP has: *"why didn't you alert on that outage?"*
 In count mode the flagged figure renders as an amber badge next to the total.
 Amber rather than red on purpose: a long window is a question, not an outage.
 
-A tile with **Show only flagged** on, **Flag after** at 30, and no group filter
-is the one to put where people will see it. Most days it reads zero.
+A tile with **Show only flagged** on, **Flag after** at `30d`, and no group
+filter is the one to put where people will see it. Most days it reads zero.
+
+The threshold takes any Zabbix-style duration, so the same widget also works at
+the other end of the scale: `Flag after 90m` on a tile scoped to one customer's
+change-window group turns it into "this change is running long", which is a
+different and equally useful tile.
+
+Two details worth knowing. A **bare number is rejected**, not read as seconds:
+this field replaced an integer day count, and somebody typing `7` out of habit
+should get an error rather than a seven second threshold that flags the whole
+estate. And the badge echoes the threshold **as you typed it** — `2 over 22h`,
+not a value normalised into units you did not choose.
+
+Validation runs when the widget is saved, so a typo surfaces in the config
+dialog rather than quietly producing a tile that flags nothing.
 
 ## Known limits
 
@@ -110,7 +124,8 @@ maintdevices/
 ├── manifest.json               type: widget, action widget.maintdevices.view
 ├── Widget.php                  primary class, display-mode constants
 ├── includes/
-│   └── WidgetForm.php          field definitions and validation
+│   ├── WidgetForm.php          field definitions
+│   └── CWidgetFieldDuration.php  free-form duration field, parser and validator
 ├── actions/
 │   └── WidgetView.php          host.get, filtering, duration, staleness
 ├── views/
@@ -119,6 +134,10 @@ maintdevices/
 └── assets/
     └── css/widget.css
 ```
+
+`CWidgetFieldDuration::parse()` is used both by the field's own validation and
+by the controller, so what the config dialog accepts and what the widget acts
+on cannot drift apart.
 
 Field names must line up in three places: defined in `WidgetForm`, rendered in
 `widget.edit.php`, read in `WidgetView`. Miss the second and the field is

@@ -14,7 +14,9 @@
 	->addField(new CWidgetFieldTagsView($data['fields']['tags']))
 	->addField(new CWidgetFieldRadioButtonListView($data['fields']['display']))
 	->addField(new CWidgetFieldRadioButtonListView($data['fields']['collection']))
-	->addField(new CWidgetFieldIntegerBoxView($data['fields']['stale_days']))
+	// CWidgetFieldDuration extends CWidgetFieldTextBox, so the stock text box
+	// view renders it. Only the validation differs.
+	->addField(new CWidgetFieldTextBoxView($data['fields']['stale_after']))
 	->addField(new CWidgetFieldCheckBoxView($data['fields']['only_stale']))
 	->addField(new CWidgetFieldRadioButtonListView($data['fields']['sort_by']))
 	->addField(new CWidgetFieldCheckBoxView($data['fields']['show_tags']))

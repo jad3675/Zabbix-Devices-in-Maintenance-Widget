@@ -30,10 +30,12 @@ if ($show_count) {
 	// The flagged count is the number worth putting on a wallboard. Anything
 	// suppressed past the threshold has stopped being maintenance and started
 	// being a gap in coverage that nobody is looking at.
-	if ($data['stale_days'] > 0 && $data['flagged'] > 0) {
+	if ($data['stale_after'] > 0 && $data['flagged'] > 0) {
+		// Echoes the threshold in the same units the operator typed it, so the
+		// badge reads "2 over 90m" or "2 over 7d" rather than normalising
+		// everything to a unit nobody chose.
 		$count->addItem((new CSpan(sprintf(
-			_n('%1$d over %2$d days', '%1$d over %2$d days', $data['flagged']),
-			$data['flagged'], $data['stale_days']
+			_('%1$d over %2$s'), $data['flagged'], $data['stale_after_text']
 		)))->addClass('md-flagged'));
 	}
 
